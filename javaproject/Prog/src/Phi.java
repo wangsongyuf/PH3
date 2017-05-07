@@ -1,10 +1,14 @@
 import java.io.IOException;
+import java.sql.ResultSet;
 import java.io.IOException;
 import java.util.Random;
+import java.util.Scanner;
 
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.ZooDefs.Ids;
+
+
 import org.apache.zookeeper.ZooKeeper;
 
 public class Phi {
@@ -14,18 +18,19 @@ public class Phi {
 	static int sleepingcount = 40;
 	static int playingcount = 20;
 	static int waitplayingcount = 20;
+	static int left,right,id;
 
 	public enum State {
 		thinking, hungry, eating, thristy, drinking, sleeping, playing, waitingPlaying
 	}
 
 	public static void main(String args[]) throws IOException, KeeperException, InterruptedException {
-		int id = Integer.parseInt(args[0]);
-		int left = id - 1;
+		 id = Integer.parseInt(args[0]);
+		 left = id - 1;
 		if (left == 0) {
 			left = 5;
 		}
-		int right = id + 1;
+		 right = id + 1;
 		if (right == 6) {
 			right = 1;
 		}
@@ -76,6 +81,85 @@ public class Phi {
 		setData("/51P", "0");
 		setData("/c", "true");
 
+		
+		
+		
+		
+		Thread t3 = new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				Scanner sc = new Scanner(System.in);
+				boolean xxx = true;
+				while (xxx) {
+					String input = sc.next();
+					
+					
+					if (input.equals("thinking")) {
+						try {
+							reset(left,right,id,State.thinking);
+						} catch (KeeperException | InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+
+					} else if (input.equals("hungry")) {
+						try {
+							reset(left,right,id,State.hungry);
+						} catch (KeeperException | InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+
+					else if (input.equals("thirsty")) {
+						try {
+							reset(left,right,id,State.thristy);
+						} catch (KeeperException | InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					
+					} else if (input.equals("sleeping")) {
+						try {
+							reset(left,right,id,State.sleeping);
+						} catch (KeeperException | InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+					}
+					else if (input.equals("playing")){
+						try {
+							reset(left,right,id,State.waitingPlaying);
+						} catch (KeeperException | InterruptedException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						try {
+							setData("/"+id + right + "P", "1");
+						} catch (KeeperException | InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+					}
+					else if (input.equals("gui")) {
+						
+					}
+
+				}
+				sc.close();
+
+			}
+		});
+		t3.start();
+		
+		
+		
+		
+		
 		Thread.sleep(10000L);
 		Random r = new Random();
 		int rand;
@@ -166,6 +250,22 @@ public class Phi {
 	public static String getData(String s) throws KeeperException, InterruptedException {
 		byte[] data = zk.getData(s, false, null);
 		return new String(data);
+	}
+	
+	
+	public static void reset(int left, int right,int id, State s) throws KeeperException, InterruptedException{
+		if(state==State.drinking){
+			setData("/c","true");
+		}
+		if(state==State.eating){
+			setData("/"+left+id,"true");
+			setData("/"+id+right, "true");
+		}
+		state=s;
+		drinkingcount = 40;
+		sleepingcount = 40;
+		 playingcount = 20;
+		 waitplayingcount = 20;
 	}
 
 }
