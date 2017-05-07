@@ -121,12 +121,12 @@ public class Phi {
 			} else if (state == State.waitingPlaying) {
 				waitplayingcount--;
 				String s = getData("/"+id + right + "P");
-				if (s == "2") {
+				if (s.equals( "2")) {
 					state = State.playing;
 					setData("/"+id + right + "P", "0");
 					waitplayingcount=20;
 				}
-				if (s == "0") {
+				if (s.equals( "0")) {
 					state = State.thinking;
 					waitplayingcount=20;
 				}
@@ -142,7 +142,7 @@ public class Phi {
 				playingcount = 20;
 			} else if (state == State.hungry || state == State.thinking || state == State.thristy) {
 				String s = getData("/"+left + id + "P");
-				if (s == "1") {
+				if (s.equals( "1")) {
 					state = State.playing;
 					setData("/"+left + id + "P", "2");
 				}
