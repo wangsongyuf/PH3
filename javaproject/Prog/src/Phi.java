@@ -140,7 +140,7 @@ public class Phi {
 			} else if (state == State.playing && playingcount <= 0) {
 				state = State.thinking;
 				playingcount = 20;
-			} else if (state == State.hungry && state == State.thinking && state == State.thristy) {
+			} else if (state == State.hungry || state == State.thinking || state == State.thristy) {
 				String s = getData("/"+left + id + "P");
 				if (s == "1") {
 					state = State.playing;
