@@ -153,7 +153,7 @@ public class Phi {
 						
 					}
 					else if (input.equals("gui")) {
-						
+						gui.main(null);
 					}
 
 				}
