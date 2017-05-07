@@ -18,6 +18,7 @@ public class Phi {
 	static int sleepingcount = 40;
 	static int playingcount = 20;
 	static int waitplayingcount = 20;
+	static int thirstycount = 200;
 	static int left,right,id;
 
 	public enum State {
@@ -119,6 +120,12 @@ public class Phi {
 						} catch (KeeperException | InterruptedException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
+						}
+						thirstycount--;
+						if (thirstycount <= 0) {
+							state = State.sleeping;
+							thirstycount = 200;
+							continue;
 						}
 					
 					} else if (input.equals("sleeping")) {
