@@ -80,6 +80,7 @@ public class Phi {
 		int rand;
 		while (true) {
 			Thread.sleep(1000L);
+			System.out.println(state);
 			rand = r.nextInt(10);
 			if (rand == 1 && state == State.thinking) {
 				state = State.hungry;
