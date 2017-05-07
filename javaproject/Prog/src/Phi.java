@@ -13,6 +13,7 @@ public class Phi {
 	static int drinkingcount = 40;
 	static int sleepingcount = 40;
 	static int playingcount = 20;
+	static int waitplayingcount = 20;
 
 	public enum State {
 		thinking, hungry, eating, thristy, drinking, sleeping, playing, waitingPlaying
@@ -118,13 +119,21 @@ public class Phi {
 				state = state.waitingPlaying;
 				setData("/"+id + right + "P", "1");
 			} else if (state == State.waitingPlaying) {
+				waitplayingcount--;
 				String s = getData("/"+id + right + "P");
 				if (s == "2") {
 					state = State.playing;
 					setData("/"+id + right + "P", "0");
+					waitplayingcount=20;
 				}
 				if (s == "0") {
 					state = State.thinking;
+					waitplayingcount=20;
+				}
+				if(	waitplayingcount<0){
+					state = State.thinking;
+					waitplayingcount=20;
+					setData("/"+id + right + "P", "0");
 				}
 			} else if (state == State.playing && playingcount > 0) {
 				playingcount--;
